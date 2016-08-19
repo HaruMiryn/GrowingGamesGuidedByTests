@@ -2,52 +2,60 @@
 using System;
 using System.Collections;
 
-public class SpaceshipGun : MonoBehaviour, IRequireUserInput {
+public class SpaceshipGun : MonoBehaviour, IRequireUserInput
+{
 
-	public IUserInputProxy InputProxy { get; set;}
-	public GameObject GunMuzzle;
-	public LaserBullet Bullet;
-	public float BulletSpeed;
-	public float BulletRange;
-	public float ShotsPerSecond;
+    public IUserInputProxy InputProxy { get; set; }
+    public GameObject GunMuzzle;
+    public LaserBullet Bullet;
+    public float BulletSpeed;
+    public float BulletRange;
+    public float ShotsPerSecond;
 
-	private float NextShot;
+    private float NextShot;
 
-	// Update is called once per frame
-	// If this component is responsible for shooting then
-	// Shoot (); 
-	void Update () {
+    // Update is called once per frame
+    // If this component is responsible for shooting then
+    // Shoot (); 
+    void Update()
+    {
+        if (CanShoot())
+            Shoot();
+    }
 
-	}
+    // Shooting is actually just an instantiation and initialization of bullets
 
-	// Shooting is actually just an instantiation and initialization of bullets
+    // var bullet = Instantiate (Bullet, GunMuzzle.transform.position, Quaternion.identity) as LaserBullet;
+    // bullet.transform.parent = this.transform.parent;
+    // bullet.Speed = BulletSpeed;
+    // bullet.Range = BulletRange;
 
-	// var bullet = Instantiate (Bullet, GunMuzzle.transform.position, Quaternion.identity) as LaserBullet;
-	// bullet.transform.parent = this.transform.parent;
-	// bullet.Speed = BulletSpeed;
-	// bullet.Range = BulletRange;
+    // Don't forget to set the interval for next shot
+    // NextShot = Time.time + 1f / ShotsPerSecond;
 
-	// Don't forget to set the interval for next shot
-	// NextShot = Time.time + 1f / ShotsPerSecond;
+    void Shoot()
+    {
+        var bullet = Instantiate(Bullet, GunMuzzle.transform.position, Quaternion.identity) as LaserBullet;
+        bullet.transform.parent = this.transform.parent;
+        bullet.Speed = BulletSpeed;
+        bullet.Range = BulletRange;
 
-	void Shoot ()
-	{
-		throw new NotImplementedException();
-	}
+        NextShot = Time.time + 1f / ShotsPerSecond;
+    }
 
-	// the ship can shoot if
-	// InputProxy != null &&
-	// InputProxy.GetButton ("Fire1") &&
-	// ItsTimeToShoot ()
+    // the ship can shoot if
+    // InputProxy != null &&
+    // InputProxy.GetButton ("Fire1") &&
+    // ItsTimeToShoot ()
 
-	bool CanShoot ()
-	{
-		throw new NotImplementedException();
-	}
+    bool CanShoot()
+    {
+        return (InputProxy != null && InputProxy.GetButton("Fire1") && ItsTimeToShoot());
+    }
 
-	// It's time to shoot if Time.time > NextShot
-	bool ItsTimeToShoot ()
-	{
-		throw new NotImplementedException();
-	}
+    // It's time to shoot if Time.time > NextShot
+    bool ItsTimeToShoot()
+    {
+        return (Time.time > NextShot);
+    }
 }

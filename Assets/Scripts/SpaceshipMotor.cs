@@ -42,8 +42,9 @@ public class SpaceshipMotor : MonoBehaviour, IRequireUserInput
     {
         var horizontal = InputProxy.GetAxis("Horizontal");
         var dx = Speed * Time.deltaTime * horizontal;
-
-        this.transform.Translate(dx, 0f, 0f);
+        
+        if (CanMoveHorizontally(dx, horizontal))
+            this.transform.Translate(dx, 0f, 0f);
     }
 
 
@@ -53,7 +54,8 @@ public class SpaceshipMotor : MonoBehaviour, IRequireUserInput
     // return   (horizontal<0 && newX> Min.x) || (horizontal>0 && newX<Max.x);
     bool CanMoveHorizontally(float dX, float horizontal)
     {
-        throw new NotImplementedException();
+        float newX = transform.position.x + dX;
+        return (horizontal < 0 && newX > Min.x) || (horizontal > 0 && newX < Max.x);
     }
 
     // To read user input you shoud use static class Input
@@ -69,9 +71,11 @@ public class SpaceshipMotor : MonoBehaviour, IRequireUserInput
 
     void MoveVertically()
     {
-		var vertical = InputProxy.GetAxis("Vertical");
-		var dy = Speed * Time.deltaTime * vertical;
-		this.transform.Translate(0f , dy , 0f);
+        var vertical = InputProxy.GetAxis("Vertical");
+        var dy = Speed * Time.deltaTime * vertical;
+
+        if (CanMoveVertically(dy, vertical))
+            this.transform.Translate(0f, dy, 0f);
     }
 
     // this depends on new y position
@@ -79,7 +83,8 @@ public class SpaceshipMotor : MonoBehaviour, IRequireUserInput
     // return   (vertical<0 && newY> Min.y) || (vertical>0 && newY<Max.y);
     bool CanMoveVertically(float dY, float vertical)
     {
-        throw new NotImplementedException();
+        float newY = transform.position.y + dY;
+        return (vertical < 0 && newY > Min.y) || (vertical > 0 && newY < Max.y);
     }
 
 }
